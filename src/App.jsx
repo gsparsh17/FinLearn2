@@ -12,7 +12,7 @@ import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Quiz from "./Pages/Quiz";
 import './index.css'
-import withLoader from "./Components/WithLoader";
+import withLoader from "./components/WithLoader";
 import { ClerkProvider, RedirectToSignIn } from '@clerk/clerk-react';
 
 // const clerkFrontendApi = process.env.REACT_APP_CLERK_FRONTEND_API;

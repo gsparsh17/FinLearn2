@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import World from "../Components/World";
-import Nav from "../Components/Nav";
-import Guide from "../Components/Guide"; // Import Guide component
+import World from "../components/World";
+import Nav from "../components/Nav";
+import Guide from "../components/Guide"; // Import Guide component
 import { getFirestore, doc, getDoc } from "firebase/firestore"; // Firebase
 
 function Game() {

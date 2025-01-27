@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/NewsChannel.css';
-import NewsCard from '../Components/NewsCard.jsx';
+import NewsCard from '../components/NewsCard.jsx';
 
 function NewsChannel() {
   const [news, setNews] = useState([]);
