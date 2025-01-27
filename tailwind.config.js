@@ -12,6 +12,9 @@ export default {
     			md: 'calc(var(--radius) - 2px)',
     			sm: 'calc(var(--radius) - 4px)'
     		},
+            fontFamily: {
+                cursive: ['"Dancing Script"', "cursive"], // Replace "Dancing Script" with your preferred cursive font
+              },
     		colors: {
     			background: 'hsl(var(--background))',
     			foreground: 'hsl(var(--foreground))',

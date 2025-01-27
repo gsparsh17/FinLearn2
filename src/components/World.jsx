@@ -147,10 +147,10 @@ function World() {
     const imagePosition1 = [34, 6, -50]; // Image plane position
 
     if (checkProximity(walkingPosition, imagePosition)) {
-      window.open("https://hdfc.com", "_blank");
+      window.location.href = "/bank";
     }
     if (checkProximity1(walkingPosition, imagePosition1)) {
-      window.open("https://amazon.com", "_blank");
+      window.open("/market", "_blank");
     }
   }, [animatedPosition])
 

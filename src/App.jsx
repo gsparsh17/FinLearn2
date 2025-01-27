@@ -20,6 +20,9 @@ const PUBLISHABLE_KEY = "pk_test_c3BlY2lhbC1jb3lvdGUtOTguY2xlcmsuYWNjb3VudHMuZGV
 
 const HomePageLoader=withLoader(HomePage);
 const GameLoader=withLoader(Game);
+const BankLoader=withLoader(Bank);
+const MarketLoader=withLoader(Market);
+const NewsLoader=withLoader(NewsChannel);
 
 
 function App() {
@@ -28,10 +31,10 @@ function App() {
       <Router>
       <Routes>
           <Route path="/" element={<HomePageLoader/>} />
-          <Route path="/bank" element={<Bank/>} />
-          <Route path="/market" element={<Market />} />
+          <Route path="/bank" element={<BankLoader/>} />
+          <Route path="/market" element={<MarketLoader />} />
           <Route path="/game" element={<GameLoader/>} />
-          <Route path="/news-channel" element={<NewsChannel />} />
+          <Route path="/news-channel" element={<NewsLoader />} />
           <Route path="/investment" element={<Investment />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/daily-tasks" element={<DailyTasks />} />

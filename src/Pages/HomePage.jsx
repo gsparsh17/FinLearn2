@@ -6,7 +6,6 @@ import '../index.css'
 function HomePage() {
   return (
     <div className="auth-container">
-      <h1 className='text-black'>hi</h1>
       <div className="auth-content">
         <h1>
           Welcome to <span>FinLearn</span>
