@@ -1,0 +1,90 @@
+.news-card {
+    border: 1px solid #ffd451; /* Yellow border */
+    border-radius: 16px; /* Rounded corners for a modern feel */
+    margin: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #00364d, #0078d7); /* Gradient background */
+    color: #ffffff; /* White text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+  }
+  
+  .news-card:hover {
+    transform: translateY(-8px); /* Lift effect on hover */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5); /* Intensified shadow */
+  }
+  
+  /* Image */
+  .news-image {
+    width: 100%;
+    max-height: 220px; /* Slightly increased height for better visibility */
+    object-fit: cover;
+    border-radius: 12px; /* Softer corners */
+    border: 2px solid #ffd451; /* Yellow border around the image */
+  }
+  
+  /* Content Section */
+  .news-content {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .news-content h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #ffd451; /* Yellow text for headings */
+    font-weight: bold;
+  }
+  
+  .news-content p {
+    font-size: 16px;
+    color: #e0e0e0; /* Light gray for paragraph text */
+    margin-bottom: 12px;
+  }
+  
+  /* Links */
+  .news-content a {
+    color: #ffd451; /* Yellow for links */
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    background: #00364d; /* Dark blue background for link button */
+    padding: 8px 16px;
+    border-radius: 8px; /* Rounded button */
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .news-content a:hover {
+    background: #ffd451; /* Yellow on hover */
+    color: #00364d; /* Dark blue text on hover */
+    text-decoration: underline;
+  }
+  
+  /* Responsive Design */
+  @media screen and (max-width: 768px) {
+    .news-card {
+      margin: 16px;
+      padding: 16px;
+    }
+  
+    .news-image {
+      max-height: 180px; /* Adjusted for smaller screens */
+    }
+  
+    .news-content h3 {
+      font-size: 18px;
+    }
+  
+    .news-content p {
+      font-size: 14px;
+    }
+  
+    .news-content a {
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+  }
+  

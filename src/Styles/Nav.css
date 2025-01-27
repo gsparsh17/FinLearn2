@@ -1,0 +1,188 @@
+/* Gaming-Themed Navbar */
+.navbar {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    width: 97%;
+    color: #ffd451;
+    font-family: "Orbitron", sans-serif; /* Gaming font */
+    /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); */
+    z-index: 1;
+  }
+  
+  .nav-status {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .timer,
+  .money {
+    font-size: 18px;
+    margin: 5px 0;
+    text-shadow: 2px 2px 2px #00364d;
+  }
+  
+  .nav-icons {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .icon-wrapper {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .icon {
+    font-size: 28px;
+    color: white;
+    transition: transform 0.3s, color 0.3s;
+    filter: drop-shadow(2px 2px 1px #00364d)
+  }
+  /* LoadingScreen.css */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black; /* Full black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 2rem;
+    font-family: "Arial", sans-serif;
+    z-index: 9999; /* Ensure it's on top of everything */
+  }
+  
+  .loading-text {
+    animation: fadeIn 1s ease-in-out infinite alternate;
+  }
+  
+  /* Optional animation for the loading text */
+  @keyframes fadeIn {
+    from {
+      opacity: 0.7;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .icon:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(2px 2px 1px #ffd451);
+  }
+  
+  .tooltip {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffd451;
+    color: #00364d;
+    font-size: 12px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    transform: translateX(-50%) translateY(10px);
+  }
+  
+  .icon-wrapper:hover .tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0px);
+  }
+  
+  .icon-wrapper:hover .icon {
+    filter: drop-shadow(2px 2px 1px #ffd451);
+  }
+
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    border-radius: 8px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90%;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+  .popup-content {
+    overflow-y: scroll; /* Enable scrolling */
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For IE and Edge */
+  }
+  
+  .popup-content::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .task-slider {
+    position: fixed;
+    top: 0;
+    right: 10;
+    height: 100%;
+    width: 300px;
+    background: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+  
+  .task-slider-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .task-slider.open {
+    transform: translateX(0);
+  }
+  
+  .close-button {
+    align-self: flex-end;
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .task-slider ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .task-slider li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  
