@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/clerk-react";
 import {
   Building2,
   BookOpen,
@@ -11,9 +12,38 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FDRDInterface from "../components/fd-rd-interface";
+import BankingForm from "@/components/BankingForm";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 export default function Dashboard() {
   const [showPopup, setShowPopup] = useState(false);
+  const [bankPopup, setBankPopup] = useState(false);
+  const [userStatus, setUserStatus] = useState(null)
+  const { user } = useUser();
+
+  useEffect(() => {
+    const fetchUserStatus = async () => {
+      const db = getFirestore();
+      const userId = user.id; // Replace with logic to get the current user's ID
+      const userDocRef = doc(db, "Users", userId);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        setUserStatus(userDocSnap.data().status || "existing");
+      } else {
+        setUserStatus("new");
+      }
+    };
+
+    fetchUserStatus();
+  }, [user]);
+
+  // Show popup if the user is new
+  useEffect(() => {
+    if (userStatus === "new") {
+      setBankPopup(true);
+    }
+  }, [userStatus]);
 
   return (
     <div className="min-h-screen bg-[#00364d] text-white relative">
@@ -109,6 +139,14 @@ export default function Dashboard() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-3xl shadow-lg max-w-xl w-full relative">
             <FDRDInterface onBack={() => setShowPopup(false)} />
+          </div>
+        </div>
+      )}
+
+{bankPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-3xl shadow-lg max-w-4xl relative">
+            <BankingForm onBack={() => setBankPopup(false)} />
           </div>
         </div>
       )}
