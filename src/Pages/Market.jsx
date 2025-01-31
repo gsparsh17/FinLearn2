@@ -392,32 +392,38 @@ export default function EcommercePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.map((product) => (
           <Card
-            key={product.id}
-            className="flex flex-col justify-between duration-300 bg-[#ffd451] shadow-lg shadow-black"
-          >
-            <CardHeader>
-              <div className="relative w-full h-48 mb-4">
-                <img
-                  src={product.image || "/placeholder.svg"}
-                  alt={product.name}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-md"
-                />
-              </div>
-              <CardTitle className="text-lg">{product.name}</CardTitle>
-              <CardDescription>{product.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold text-green-600">${product.price.toLocaleString()}</p>
-            </CardContent>
-            <CardFooter className="flex justify-between items-center">
-              <Button onClick={() => setSelectedProduct(product)} className="bg-blue-600 hover:bg-blue-700">
-                Buy with EMI
-              </Button>
-              <p className="text-sm text-gray-500">EMI starts at ${calculateEMI(product.price, 12)}/mo</p>
-            </CardFooter>
-          </Card>
+          key={product.id}
+          className="flex flex-col justify-between p-4 duration-300 bg-gradient-to-r from-yellow-400 via-orange-300 to-yellow-500 shadow-xl hover:scale-105 hover:shadow-2xl rounded-lg"
+        >
+          <CardHeader>
+            <div className="relative w-full mb-4">
+              <img
+                src={product.image || "/placeholder.svg"}
+                alt={product.name}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg shadow-md w-60 h-40"
+              />
+            </div>
+            <CardTitle className="text-lg font-semibold text-gray-800">{product.name}</CardTitle>
+            <CardDescription className="text-sm text-gray-700">{product.description}</CardDescription>
+          </CardHeader>
+          <CardContent className="mt-4">
+            <p className="text-2xl font-bold text-green-700">${product.price.toLocaleString()}</p>
+          </CardContent>
+          <CardFooter className="flex flex-col gap-4 justify-between items-center mt-4">
+            <Button
+              onClick={() => setSelectedProduct(product)}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg"
+            >
+              Buy with EMI
+            </Button>
+            <p className="text-sm text-gray-600">
+              EMI starts at <span className="font-medium">${calculateEMI(product.price, 12)}/mo</span>
+            </p>
+          </CardFooter>
+        </Card>
+        
         ))}
       </div>
 
