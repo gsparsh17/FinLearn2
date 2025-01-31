@@ -42,7 +42,7 @@ function Nav() {
   
   // Chatbot states
   const [query, setQuery] = useState("");
-  const [chatResponse, setChatResponse] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [chatLoading, setChatLoading] = useState(false);
   const [chatError, setError] = useState(null);
 
@@ -98,9 +98,15 @@ function Nav() {
     }
     setChatLoading(true);
     setError(null);
+    
+    // Add user message
+    setMessages(prev => [...prev, { type: 'user', text: query }]);
+    
     try {
       const res = await axios.get(`${API_URL}?query=${encodeURIComponent(query)}`);
-      setChatResponse(res.data);
+      // Add bot message
+      setMessages(prev => [...prev, { type: 'bot', text: res.data.summary }]);
+      setQuery('');
     } catch (err) {
       setError("Failed to fetch data. Please try again.");
     }
@@ -177,31 +183,65 @@ function Nav() {
             <button className="close-button" onClick={Guide1}>
               &times;
             </button>
-            <div className="flex flex-col items-center p-4">
-              <h1 className="text-2xl font-bold mb-4">Web Chatbot</h1>
-              <input
-                type="text"
-                className="border p-2 w-80 rounded mb-2"
-                placeholder="Enter your query here..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={handleQuerySubmit}
-                disabled={chatLoading}
-              >
-                {chatLoading ? "Loading..." : "Send"}
-              </button>
-              {chatError && <p className="text-red-500 mt-2">{chatError}</p>}
-              {chatResponse && (
-                <div className="mt-4 p-4 border rounded w-80 bg-gray-100">
-                  <h2 className="font-semibold">Query:</h2>
-                  <p>{chatResponse.query}</p>
-                  <h2 className="font-semibold mt-2">Summary:</h2>
-                  <p>{chatResponse.summary}</p>
+            <div className="flex flex-col h-[600px] w-[400px] bg-gray-100">
+              {/* Chat Header */}
+              <div className="bg-blue-500 p-4 flex items-center">
+                <img 
+                  src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+                  alt="Bot Avatar"
+                  className="w-10 h-10 rounded-full mr-3"
+                />
+                <h1 className="text-xl text-white font-semibold">Finance Advisor</h1>
+              </div>
+
+              {/* Chat Messages */}
+              <div className="flex-1 p-4 overflow-y-auto">
+                {messages.map((message, index) => (
+                  <div 
+                    key={index}
+                    className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
+                  >
+                    {message.type === 'bot' && (
+                      <img 
+                        src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+                        alt="Bot Avatar"
+                        className="w-8 h-8 rounded-full mr-2"
+                      />
+                    )}
+                    <div 
+                      className={`max-w-[70%] p-3 rounded-lg ${
+                        message.type === 'user' 
+                          ? 'bg-blue-500 text-white rounded-br-none'
+                          : 'bg-white rounded-bl-none'
+                      }`}
+                    >
+                      {message.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Chat Input */}
+              <div className="p-4 bg-white border-t">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:border-blue-500"
+                    placeholder="Type your message..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleQuerySubmit()}
+                  />
+                  <button
+                    className="bg-blue-500 text-white rounded-full p-2 w-10 h-10 flex items-center justify-center"
+                    onClick={handleQuerySubmit}
+                    disabled={chatLoading}
+                  >
+                    ➤
+                  </button>
                 </div>
-              )}
+                {chatError && <p className="text-red-500 mt-2 text-sm">{chatError}</p>}
+              </div>
             </div>
           </div>
         </div>
