@@ -146,6 +146,8 @@
     border: none;
     font-size: 20px;
     cursor: pointer;
+    color: red;
+
   }
   .task-slider {
     position: fixed;
@@ -177,6 +179,7 @@
     background: none;
     font-size: 20px;
     cursor: pointer;
+    color: red;
   }
   
   .task-slider ul {

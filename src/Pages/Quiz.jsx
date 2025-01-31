@@ -90,7 +90,7 @@ function Quiz() {
         return;
       }
 
-    const userEmail = user.primaryEmailAddress.emailAddress;
+      const userEmail = user.primaryEmailAddress.emailAddress;
       const userId = user.id;
       const userDocRef = doc(db, "Users", userId);
       const userDocSnap = await getDoc(userDocRef);
