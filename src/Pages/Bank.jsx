@@ -12,9 +12,11 @@ import { Button } from "@/components/ui/button";
 import FDRDInterface from "../components/fd-rd-interface";
 import BankingForm from "@/components/BankingForm";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
+import MutualFundsView from "@/components/MutualFundsView";
 
 export default function Dashboard() {
   const [showPopup, setShowPopup] = useState(false);
+  const [showMFPopup, setShowMFPopup] = useState(false);
   const [bankPopup, setBankPopup] = useState(false);
   const [userStatus, setUserStatus] = useState(null)
   const { user } = useUser();
@@ -121,7 +123,9 @@ export default function Dashboard() {
           >
             FD/RD
           </Button>
-          <Button className="aspect-square bg-[#0078d7] hover:bg-[#005fa3] text-white text-xl rounded-3xl p-8 shadow-md">
+          <Button
+          onClick={() => setShowMFPopup(true)}
+          className="aspect-square bg-[#0078d7] hover:bg-[#005fa3] text-white text-xl rounded-3xl p-8 shadow-md">
             Mutual
             <br />
             Funds
@@ -144,6 +148,15 @@ export default function Dashboard() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-3xl shadow-lg max-w-xl w-full relative">
             <FDRDInterface onBack={() => setShowPopup(false)} />
+          </div>
+        </div>
+      )}
+
+      {/* MF Modal */}
+      {showMFPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-3xl shadow-lg max-w-xl w-full relative">
+            <MutualFundsView onBack={() => setShowMFPopup(false)} />
           </div>
         </div>
       )}
