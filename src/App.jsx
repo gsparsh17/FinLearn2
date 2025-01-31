@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import Bank from "./Pages/Bank";
@@ -14,6 +14,9 @@ import Quiz from "./Pages/Quiz";
 import './index.css'
 import withLoader from "./components/WithLoader";
 import { ClerkProvider, RedirectToSignIn } from '@clerk/clerk-react';
+import StockTradingPage from "./Pages/StockTradingPage";
+import PortfolioPage from "./Pages/PortfolioPage";
+import { UserProvider } from "./context/UserContext";
 
 // const clerkFrontendApi = process.env.REACT_APP_CLERK_FRONTEND_API;
 const PUBLISHABLE_KEY = "pk_test_c3BlY2lhbC1jb3lvdGUtOTguY2xlcmsuYWNjb3VudHMuZGV2JA";
@@ -23,9 +26,12 @@ const GameLoader=withLoader(Game);
 const BankLoader=withLoader(Bank);
 const MarketLoader=withLoader(Market);
 const NewsLoader=withLoader(NewsChannel);
+const StockTradingLoaderPage=withLoader(StockTradingPage);
+const PortfolioLoaderPage=withLoader(PortfolioPage);
 
 
 function App() {
+  const [portfolioCreated, setPortfolioCreated] = useState(false);
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <Router>
@@ -34,6 +40,20 @@ function App() {
           <Route path="/bank" element={<BankLoader/>} />
           <Route path="/market" element={<MarketLoader />} />
           <Route path="/game" element={<GameLoader/>} />
+          <Route
+                      path="/stock"
+                      element={
+                        portfolioCreated ? (
+                          <UserProvider>
+                          <StockTradingLoaderPage />
+                          </UserProvider>
+                        ) : (
+                          <UserProvider>
+                          <PortfolioLoaderPage onComplete={() => setPortfolioCreated(true)} />
+                          </UserProvider>
+                        )
+                      }
+                    />
           <Route path="/news-channel" element={<NewsLoader />} />
           <Route path="/investment" element={<Investment />} />
           <Route path="/wallet" element={<Wallet />} />
