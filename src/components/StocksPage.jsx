@@ -5,9 +5,8 @@ import StockChart from "./StockChart";
 const StocksPage = () => {
   const { user, setUser } = useContext(UserContext);
   const [stocks, setStocks] = useState([]);
-  const [portfolio, setPortfolio] = useState({}); // Track owned stocks with quantity
+  const [portfolio, setPortfolio] = useState({});
 
-  // Generate random stock data
   useEffect(() => {
     const generateRandomStocks = () => {
       const stockNames = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"];
@@ -63,20 +62,40 @@ const StocksPage = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <h2>Welcome, {user.name}</h2>
-      <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", width: "80%" }}>
+    <div className="flex flex-col items-center w-full p-6">
+      <h2 className="text-2xl font-bold text-[#e6c040] mb-5">Stock Market</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-4/5">
         {stocks.map((stock, index) => (
-          <div key={index} style={{ border: "1px solid black", padding: "10px", margin: "10px" }}>
-            <h4>{stock.name}</h4>
-            <p>Price: ${stock.price}</p>
+          <div
+            key={index}
+            className="bg-[#f8f8f8] p-4 rounded-lg shadow-lg text-white flex flex-col items-center"
+          >
+            <h4 className="text-lg font-semibold">{stock.name}</h4>
+            <p className="text-xl font-bold">${stock.price}</p>
             <StockChart history={stock.history} />
-            <button onClick={() => handleBuy(stock)}>Buy</button>
-            <button onClick={() => handleSell(stock)}>Sell</button>
+            <div className="flex gap-3 mt-3">
+              <button
+                onClick={() => handleBuy(stock)}
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+              >
+                Buy
+              </button>
+              <button
+                onClick={() => handleSell(stock)}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+              >
+                Sell
+              </button>
+            </div>
           </div>
         ))}
       </div>
-      <button onClick={handlePass}>Pass</button>
+      <button
+        onClick={handlePass}
+        className="mt-6 bg-[#e6c040] hover:bg-yellow-500 text-black font-bold px-6 py-2 rounded-lg"
+      >
+        Next Round
+      </button>
     </div>
   );
 };
