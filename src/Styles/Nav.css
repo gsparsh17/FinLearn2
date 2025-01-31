@@ -6,6 +6,7 @@
     align-items: center;
     padding: 15px 20px;
     width: 97%;
+    font-weight: bold;
     color: #ffd451;
     font-family: "Orbitron", sans-serif; /* Gaming font */
     /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); */
@@ -19,7 +20,9 @@
   
   .timer,
   .money {
-    font-size: 18px;
+    font-family: cursive;
+    font-weight: bold;
+    font-size: 24px;
     margin: 5px 0;
     text-shadow: 2px 2px 2px #00364d;
   }
