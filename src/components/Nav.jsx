@@ -183,77 +183,87 @@ function Nav() {
             <button className="close-button" onClick={Guide1}>
               &times;
             </button>
-            <div className="flex flex-col h-[600px] w-[400px] bg-gray-100">
-              {/* Chat Header */}
-              <div className="bg-blue-500 p-4 flex items-center">
-                <img 
-                  src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
-                  alt="Bot Avatar"
-                  className="w-10 h-10 rounded-full mr-3"
+            <div className="flex flex-row h-[600px] w-[800px]">
+              {/* Image Section */}
+              <div className="w-1/2 p-4 flex flex-col items-center justify-center">
+                <img
+                  src="/4.png"
+                  alt="Guide Image" 
+                  className="h-full w-full object-contain mb-4"
                 />
-                <h1 className="text-xl text-white font-semibold">Finance Advisor</h1>
+                <p className="text-center text-gray-400 font-semibold">
+                  Welcome to our support chatbot. You can ask any question, and we are here to assist you professionally.
+                </p>
               </div>
 
-              {/* Chat Messages */}
-              <div className="flex-1 p-4 overflow-y-auto">
-                {messages.map((message, index) => (
-                  <div 
-                    key={index}
-                    className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
-                  >
-                    {message.type === 'bot' && (
-                      <img 
-                        src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
-                        alt="Bot Avatar"
-                        className="w-8 h-8 rounded-full mr-2"
-                      />
-                    )}
-                    <div 
-                      className={`max-w-[70%] p-3 rounded-lg ${
-                        message.type === 'user' 
-                          ? 'bg-blue-500 text-white rounded-br-none'
-                          : 'bg-white rounded-bl-none'
-                      }`}
-                    >
-                      {message.text}
-                    </div>
+              {/* Chat Section */}
+              <div className="w-1/2 flex flex-col bg-gray-800 rounded-lg shadow-lg overflow-hidden font-cursive">
+                {/* Chat Header */}
+                <div className="p-4 flex items-center bg-blue-700">
+                  <img 
+                    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+                    alt="Bot Avatar"
+                    className="w-12 h-12 rounded-full mr-3 border-2 border-white"
+                  />
+                  <h1 className="text-2xl font-bold text-white">Finance Advisor</h1>
+                </div>
+
+                {/* Chat Messages */}
+                <div 
+                  className="flex-1 p-4 overflow-y-auto bg-gray-900 scroll-smooth"
+                  style={{
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: '#4B5563 #1F2937',
+                  }}
+                >
+                  <div className="space-y-4">
+                    {messages.map((message, index) => (
+                      <div 
+                        key={index}
+                        className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} mb-4 animate-fadeIn`}
+                      >
+                        {message.type === 'bot' && (
+                          <img 
+                            src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+                            alt="Bot Avatar"
+                            className="w-8 h-8 rounded-full mr-2 border-2 border-blue-500 hover:scale-110 transition-transform"
+                          />
+                        )}
+                        <div 
+                          className={`max-w-[70%] p-3 rounded-lg shadow-md hover:shadow-xl transition-shadow ${
+                            message.type === 'user' 
+                              ? 'bg-yellow-500 bg-opacity-70 text-white rounded-br-none hover:bg-opacity-80'
+                              : 'bg-blue-600 bg-opacity-30 text-white rounded-bl-none hover:bg-opacity-40'
+                          }`}
+                        >
+                          {message.text}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
 
-              {/* Chat Input */}
-              <div className="p-4 bg-white border-t">
-                <div className="flex gap-2">
+                {/* Chat Input */}
+                <div className="flex gap-2 p-4 bg-gray-800">
                   <input
                     type="text"
-                    className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:border-blue-500"
+                    className="flex-1 border-2 border-gray-700 rounded-full px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 bg-gray-700 text-white transition-all"
                     placeholder="Type your message..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleQuerySubmit()}
                   />
                   <button
-                    className="bg-blue-500 text-white rounded-full p-2 w-10 h-10 flex items-center justify-center"
+                    className="bg-blue-500 text-white rounded-full p-2 w-12 h-12 flex items-center justify-center shadow-lg hover:bg-blue-600 active:bg-blue-700 transform hover:scale-105 active:scale-95 transition duration-300"
                     onClick={handleQuerySubmit}
                     disabled={chatLoading}
                   >
                     ➤
                   </button>
                 </div>
-                {chatError && <p className="text-red-500 mt-2 text-sm">{chatError}</p>}
+                {chatError && <p className="text-red-500 mt-2 text-sm text-center animate-pulse">{chatError}</p>}
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {isTaskSliderOpen && (
-        <div className="task-slider">
-          <div className="task-slider-content">
-            <button className="close-button" onClick={toggleTaskSlider}>
-              &times;
-            </button>
-            <DailyTasks/>
           </div>
         </div>
       )}
