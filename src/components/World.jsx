@@ -38,6 +38,7 @@ function City() {
   // Load the image as a texture
   const texture = new THREE.TextureLoader().load("/bank.jpg");
   const texture1 = new THREE.TextureLoader().load("/market.webp");
+  const texture2 = new THREE.TextureLoader().load("/stocks.webp");
 
   return (
     <>
@@ -57,6 +58,11 @@ function City() {
       <mesh position={[34, 6, -50]} rotation={[0, 3*Math.PI/2, 0]}>
         <planeGeometry args={[10, 5]} /> {/* Width: 10, Height: 5 */}
         <meshBasicMaterial map={texture1} transparent />
+      </mesh>
+
+      <mesh position={[8, 6, -100]} rotation={[0, Math.PI/2, 0]}>
+        <planeGeometry args={[10, 5]} /> {/* Width: 10, Height: 5 */}
+        <meshBasicMaterial map={texture2} transparent />
       </mesh>
     </>
   );
@@ -101,6 +107,14 @@ function World() {
     return distance <= 8;
   };
 
+  const checkProximity2 = (walkingPosition, imagePosition) => {
+    const distance = new THREE.Vector3(...walkingPosition)
+      .distanceTo(new THREE.Vector3(...imagePosition));
+      console.log(distance)
+    return distance <= 8;
+  };
+
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       switch (e.key) {
@@ -144,13 +158,17 @@ function World() {
   useEffect(() => {
     const walkingPosition = animatedPosition;
     const imagePosition = [-10, 5, -40];
-    const imagePosition1 = [34, 6, -50]; // Image plane position
+    const imagePosition1 = [34, 6, -50];
+    const imagePosition2 = [8, 6, -100]; // Image plane position
 
     if (checkProximity(walkingPosition, imagePosition)) {
       window.location.href = "/bank";
     }
     if (checkProximity1(walkingPosition, imagePosition1)) {
       window.open("/market", "_blank");
+    }
+    if (checkProximity1(walkingPosition, imagePosition2)) {
+      window.open("/stock", "_blank");
     }
   }, [animatedPosition])
 
