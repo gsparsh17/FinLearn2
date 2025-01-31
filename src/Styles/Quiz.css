@@ -1,6 +1,8 @@
 body {
     background-color: white;
     position: relative;
+    font-family: cursive;
+    color: black;
   }
   
   .bg {
@@ -126,6 +128,7 @@ body {
     transition: opacity 300ms, transform 300ms;
   }
   .age-input{
+    margin-top: 8px;
     padding: 12px 25px;
     font-size: 1rem;
     font-weight: bold;

@@ -5,16 +5,91 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import LumpSumView from "./LumpSumView"
 import SIPView from "./SIPView"
-import { getInvestments, setInvestments, calculateReturns } from "../utils/userUtils"
+// import { getInvestments, setInvestments, calculateReturns } from "./userUtils"
 
-export default function MutualFundsView({ balance, onClose, onUpdateBalance }) {
+const isFirstTimeUser = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("userRegistered") !== "true"
+  }
+  return true
+}
+
+const setUserRegistered = () => {
+  localStorage.setItem("userRegistered", "true")
+}
+
+const getUserData = () => {
+  if (typeof window !== "undefined") {
+    const userData = localStorage.getItem("userData")
+    return userData ? JSON.parse(userData) : null
+  }
+  return null
+}
+
+const setUserData = (data) => {
+  localStorage.setItem("userData", JSON.stringify(data))
+}
+
+const getBalance = () => {
+  if (typeof window !== "undefined") {
+    const balance = localStorage.getItem("balance")
+    return balance ? Number.parseFloat(balance) : 100000
+  }
+  return 100000
+}
+
+const setBalance = (balance) => {
+  localStorage.setItem("balance", balance.toString())
+}
+
+const getInvestments = () => {
+  if (typeof window !== "undefined") {
+    const investments = localStorage.getItem("investments")
+    return investments ? JSON.parse(investments) : {}
+  }
+  return {}
+}
+
+const setInvestments = (investments) => {
+  localStorage.setItem("investments", JSON.stringify(investments))
+}
+
+const calculateReturns = (investment) => {
+  const monthsDiff = Math.floor(
+    (new Date().getTime() - new Date(investment.depositDate).getTime()) / (1000 * 60 * 60 * 24 * 30),
+  )
+  const returnRate = -2.4 // Annual return rate
+  const monthlyRate = returnRate / 12 / 100
+
+  if (investment.type === "lumpSum") {
+    return investment.amount * (1 + monthlyRate * monthsDiff)
+  } else {
+    // For SIP, calculate returns for each monthly investment
+    let totalReturns = 0
+    for (let i = 0; i < investment.installments; i++) {
+      totalReturns += investment.amount * (1 + monthlyRate * (monthsDiff - i))
+    }
+    return totalReturns
+  }
+}
+
+export default function MutualFundsView({ onBack }) {
   const [activeView, setActiveView] = useState("all")
   const [investments, setInvestmentsState] = useState({})
+  const [balance, setBalanceState] = useState(0) // Initialize balance state
 
   useEffect(() => {
     const savedInvestments = getInvestments()
     setInvestmentsState(savedInvestments)
+
+    const initialBalance = getBalance() // Get balance from localStorage
+    setBalanceState(initialBalance) // Set state
   }, [])
+
+  const onUpdateBalance = (newBalance) => {
+    setBalanceState(newBalance)
+    setBalance(newBalance) // Save to localStorage
+  }
 
   const handleDeposit = (type, amount) => {
     const newInvestment = {
@@ -97,98 +172,65 @@ export default function MutualFundsView({ balance, onClose, onUpdateBalance }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <Card className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[#00364d] text-white p-4">
+      <Card className="max-w-4xl mx-auto bg-[#0078d7] border-[#ffd451] shadow-lg shadow-[#ffd451]/50">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" onClick={onClose}>
-                <ArrowLeft className="h-6 w-6" />
-              </Button>
-              <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-bold">Mutual Funds</h1>
-                <Building2 className="h-6 w-6 text-purple-500" />
-              </div>
-            </div>
+            <Button variant="ghost" size="icon" onClick={onBack}>
+              <ArrowLeft className="h-6 w-6 text-[#ffd451]" />
+            </Button>
+            <h1 className="text-2xl font-bold text-[#ffd451] flex items-center gap-2">
+              Mutual Funds <Building2 className="h-6 w-6" />
+            </h1>
             <div className="text-right">
-              <p className="text-sm text-gray-500">Month 6 / ∞</p>
+              <p className="text-sm">Month 6 / ∞</p>
               <p className="text-xl font-bold">Balance ${balance.toFixed(2)}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <Card className="p-6 bg-purple-100">
-              <div className="text-4xl font-bold text-purple-700 mb-2">${getTotalInvestment().toFixed(2)}</div>
-              <div className="text-sm text-purple-600">Total Investment</div>
-              <div className="text-lg font-semibold text-purple-700 mt-2">${getTotalReturns().toFixed(2)}</div>
-              <div className="text-sm text-purple-600">Total Returns</div>
+            <Card className="p-6 bg-[#0078d7] text-white rounded-xl border border-[#ffd451] shadow-md">
+              <div className="text-4xl font-bold mb-2">${getTotalInvestment().toFixed(2)}</div>
+              <div className="text-sm">Total Investment</div>
+              <div className="text-lg font-semibold mt-2">${getTotalReturns().toFixed(2)}</div>
+              <div className="text-sm">Total Returns</div>
             </Card>
-            <Card className="p-6 bg-purple-100">
-              <div className="text-xl font-semibold text-purple-700 mb-4">Your Deposits</div>
+            <Card className="p-6 bg-[#0078d7] text-white rounded-xl border border-[#ffd451] shadow-md">
+              <div className="text-xl font-semibold mb-4">Your Deposits</div>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-purple-700">${getCurrentDeposit("lumpSum").toFixed(2)}</p>
-                    <p className="text-sm text-purple-600">Lump-Sum</p>
-                  </div>
-                  <Button variant="outline" onClick={() => setActiveView("lumpSum")}>
-                    View
-                  </Button>
+                  <p className="text-lg">${getCurrentDeposit("lumpSum").toFixed(2)}</p>
+                  <Button variant="outline" onClick={() => setActiveView("lumpSum")}>View</Button>
                 </div>
                 <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-purple-700">${getCurrentDeposit("sip").toFixed(2)}</p>
-                    <p className="text-sm text-purple-600">SIP</p>
-                  </div>
-                  <Button variant="outline" onClick={() => setActiveView("sip")}>
-                    View
-                  </Button>
+                  <p className="text-lg">${getCurrentDeposit("sip").toFixed(2)}</p>
+                  <Button variant="outline" onClick={() => setActiveView("sip")}>View</Button>
                 </div>
               </div>
             </Card>
           </div>
 
           <Tabs value={activeView} onValueChange={setActiveView}>
-            <TabsList className="grid grid-cols-3 mb-4">
+            <TabsList className="grid grid-cols-3 bg-[#0078d7] border border-[#ffd451] text-white rounded-lg mb-4">
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="lumpSum">Lump-Sum</TabsTrigger>
               <TabsTrigger value="sip">SIP</TabsTrigger>
             </TabsList>
             <TabsContent value="all">
-              <Card className="p-6">
+              <Card className="p-6 bg-[#00364d] text-white border border-[#ffd451]">
                 <h2 className="text-xl font-semibold mb-4">Learn About Mutual Funds</h2>
-                <p className="text-gray-600 mb-4">
-                  Mutual funds pool money from multiple investors to invest in a diversified portfolio of stocks, bonds,
-                  or other securities.
-                </p>
+                <p className="mb-4">Mutual funds pool money from multiple investors into a diversified portfolio.</p>
                 <div className="grid grid-cols-2 gap-4">
-                  <Button className="w-full bg-purple-500 hover:bg-purple-600" onClick={() => setActiveView("lumpSum")}>
-                    Start Lump-Sum Investment
-                  </Button>
-                  <Button className="w-full bg-purple-500 hover:bg-purple-600" onClick={() => setActiveView("sip")}>
-                    Start SIP Investment
-                  </Button>
+                  <Button className="w-full bg-[#ffd451] text-[#00364d] hover:bg-[#ffcc00]" onClick={() => setActiveView("lumpSum")}>Start Lump-Sum</Button>
+                  <Button className="w-full bg-[#ffd451] text-[#00364d] hover:bg-[#ffcc00]" onClick={() => setActiveView("sip")}>Start SIP</Button>
                 </div>
               </Card>
             </TabsContent>
             <TabsContent value="lumpSum">
-              <LumpSumView
-                balance={balance}
-                onDeposit={(amount) => handleDeposit("lumpSum", amount)}
-                onWithdraw={(amount) => handleWithdraw("lumpSum", amount)}
-                currentDeposit={getCurrentDeposit("lumpSum")}
-                investment={getCurrentInvestment("lumpSum")}
-              />
+              <LumpSumView balance={balance} currentDeposit={getCurrentDeposit("lumpSum")} onDeposit={handleDeposit} onWithdraw={handleWithdraw} investment={getCurrentInvestment("lumpSum")} />
             </TabsContent>
             <TabsContent value="sip">
-              <SIPView
-                balance={balance}
-                onDeposit={(amount) => handleDeposit("sip", amount)}
-                onWithdraw={(amount) => handleWithdraw("sip", amount)}
-                onStop={handleStopSIP}
-                currentDeposit={getCurrentDeposit("sip")}
-                investment={getCurrentInvestment("sip")}
-              />
+              <SIPView balance={balance} currentDeposit={getCurrentDeposit("sip")} onDeposit={handleDeposit} onWithdraw={handleWithdraw} onStop={handleStopSIP} investment={getCurrentInvestment("sip")} />
             </TabsContent>
           </Tabs>
         </div>
