@@ -1,6 +1,4 @@
-"use client"
-
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,35 +6,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CheckCircle, X } from "lucide-react"
 import { Cart } from "../components/Cart"
 
-// Product type definition
-const Product = {
-  id: 0,
-  name: "",
-  description: "",
-  price: 0,
-  image: "",
-}
-
-const CartItem = {
-  id: 0,
-  name: "",
-  price: 0,
-  quantity: 0,
-}
-
 // Add these functions at the top of the file, outside the component
 const saveToLocalStorage = (key, value) => {
-  localStorage.setItem(key, JSON.stringify(value));
-};
+  localStorage.setItem(key, JSON.stringify(value))
+}
 
-// Load data from localStorage
 const loadFromLocalStorage = (key, defaultValue) => {
-  const saved = localStorage.getItem(key);
+  const saved = localStorage.getItem(key)
   if (saved) {
-    return JSON.parse(saved);
+    return JSON.parse(saved)
   }
-  return defaultValue;
-};
+  return defaultValue
+}
 
 // Sample product data with network images
 const products = [
@@ -382,48 +363,42 @@ export default function EcommercePage() {
   }, [cartItems])
 
   return (
-    <div className="container mx-auto p-4 font-cursive">
-      <div className="sticky top-0 bg-[#00364d] text-[#ffd451] z-10 py-4 mb-8 border-b shadow-lg shadow-black">
+    <div className="container mx-auto p-4">
+      <div className=" top-0 bg-blue z-10 py-4 mb-8 border-b">
         <h1 className="text-3xl font-bold mb-4 text-center">Luxury E-commerce Store with EMI Options</h1>
         <p className="text-xl font-semibold text-center">
           Your Balance: <span className="text-green-600">${userBalance.toLocaleString()}</span>
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 auto-rows-fr">
         {products.map((product) => (
           <Card
-          key={product.id}
-          className="flex flex-col justify-between p-4 duration-300 bg-gradient-to-r from-yellow-400 via-orange-300 to-yellow-500 shadow-xl hover:scale-105 hover:shadow-2xl rounded-lg"
-        >
-          <CardHeader>
-            <div className="relative w-full mb-4">
-              <img
-                src={product.image || "/placeholder.svg"}
-                alt={product.name}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg shadow-md w-60 h-40"
-              />
-            </div>
-            <CardTitle className="text-lg font-semibold text-gray-800">{product.name}</CardTitle>
-            <CardDescription className="text-sm text-gray-700">{product.description}</CardDescription>
-          </CardHeader>
-          <CardContent className="mt-4">
-            <p className="text-2xl font-bold text-green-700">${product.price.toLocaleString()}</p>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-4 justify-between items-center mt-4">
-            <Button
-              onClick={() => setSelectedProduct(product)}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg"
-            >
-              Buy with EMI
-            </Button>
-            <p className="text-sm text-gray-600">
-              EMI starts at <span className="font-medium">${calculateEMI(product.price, 12)}/mo</span>
-            </p>
-          </CardFooter>
-        </Card>
-        
+            key={product.id}
+            className="flex flex-col justify-between duration-300 bg-[#ffd451] shadow-lg shadow-black"
+          >
+            <CardHeader>
+              <div className="relative w-full h-48 mb-4">
+                <img
+                  src={product.image || "/placeholder.svg"}
+                  alt={product.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-md"
+                />
+              </div>
+              <CardTitle className="text-lg">{product.name}</CardTitle>
+              <CardDescription>{product.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-green-600">${product.price.toLocaleString()}</p>
+            </CardContent>
+            <CardFooter className="flex justify-between items-center">
+              <Button onClick={() => setSelectedProduct(product)} className="bg-blue-600 hover:bg-blue-700">
+                Buy with EMI
+              </Button>
+              <p className="text-sm text-gray-500">EMI starts at ${calculateEMI(product.price, 12)}/mo</p>
+            </CardFooter>
+          </Card>
         ))}
       </div>
 
@@ -433,47 +408,62 @@ export default function EcommercePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-8 z-50"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 15 }}
+              className="w-[600px]"
             >
-              <Card className="w-full max-w-md">
-                <CardHeader>
-                  <CardTitle>{selectedProduct.name}</CardTitle>
-                  <CardDescription>Choose your EMI plan</CardDescription>
+              <Card className="w-full max-w-2xl">
+                <CardHeader className="p-4 border-b">
+                  <CardTitle className="text-xl font-bold mb-1">{selectedProduct.name}</CardTitle>
+                  <CardDescription className="text-base">Choose your EMI plan</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <Select onValueChange={(value) => setEmiMonths(Number.parseInt(value))}>
-                    <SelectTrigger className="w-full">
+                <CardContent className="p-4 space-y-4">
+                  <div className="w-full h-48 mb-4 overflow-hidden rounded-lg">
+                    <img
+                      src={selectedProduct.image || "/placeholder.svg"}
+                      alt={selectedProduct.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <Select onValueChange={(value) => setEmiMonths(Number.parseInt(value))} className="w-full">
+                    <SelectTrigger className="w-full text-base p-3 h-12">
                       <SelectValue placeholder="Select EMI duration" />
                     </SelectTrigger>
                     <SelectContent>
                       {[3, 6, 9, 12, 18, 24].map((months) => (
-                        <SelectItem key={months} value={months.toString()}>
+                        <SelectItem key={months} value={months.toString()} className="text-base py-2 px-3">
                           {months} months
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <div className="mt-4">
-                    <p className="text-lg font-semibold">
-                      Monthly EMI: ${calculateEMI(selectedProduct.price, emiMonths)}
+                  <div className="mt-4 p-4 bg-gray-50 rounded-lg shadow-sm">
+                    <p className="text-lg font-semibold mb-2">
+                      Monthly EMI: <span className="text-green-600">${calculateEMI(selectedProduct.price, emiMonths)}</span>
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-base text-gray-600">
                       Total: $
                       {(Number.parseFloat(calculateEMI(selectedProduct.price, emiMonths)) * emiMonths).toFixed(2)}
                     </p>
                   </div>
                 </CardContent>
-                <CardFooter className="flex justify-between">
-                  <Button variant="outline" onClick={() => setSelectedProduct(null)}>
+                <CardFooter className="flex justify-between p-4 bg-gray-50 border-t gap-3">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setSelectedProduct(null)} 
+                    className="text-base px-6 py-2 h-12 flex-1 hover:bg-gray-100"
+                  >
                     Cancel
                   </Button>
-                  <Button onClick={handleConfirmPurchase} className="bg-green-600 hover:bg-green-700">
+                  <Button 
+                    onClick={handleConfirmPurchase} 
+                    className="bg-green-600 hover:bg-green-700 text-base px-6 py-2 h-12 flex-1"
+                  >
                     Confirm Purchase
                   </Button>
                 </CardFooter>
@@ -487,17 +477,17 @@ export default function EcommercePage() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4"
         >
-          <div className="bg-white rounded-lg p-8 shadow-2xl text-center">
+          <div className="bg-white rounded-lg p-6 shadow-2xl text-center w-[400px]">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200, damping: 10 }}
             >
-              <X className="w-16 h-16 text-red-500 mx-auto mb-4" />
+              <X className="w-12 h-12 text-red-500 mx-auto mb-3" />
             </motion.div>
-            <h2 className="text-2xl font-bold mb-4">Insufficient Funds</h2>
+            <h2 className="text-xl font-bold mb-3">Insufficient Funds</h2>
             <p className="text-gray-600">Sorry, you don't have enough balance to make this purchase.</p>
           </div>
         </motion.div>
@@ -508,17 +498,17 @@ export default function EcommercePage() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="fixed inset-0 flex items-center justify-center z-50"
+            className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4"
           >
-            <div className="bg-white rounded-lg p-8 shadow-2xl text-center">
+            <div className="bg-white rounded-lg p-6 shadow-2xl text-center w-[400px]">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 200, damping: 10 }}
               >
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
               </motion.div>
-              <h2 className="text-2xl font-bold mb-4">Purchase Successful!</h2>
+              <h2 className="text-xl font-bold mb-3">Purchase Successful!</h2>
               <p className="text-gray-600">
                 Thank you for your purchase. Your order has been confirmed and added to your cart.
               </p>
@@ -527,8 +517,7 @@ export default function EcommercePage() {
         )}
       </AnimatePresence>
 
-      <Cart items={cartItems} onRemoveItem={handleRemoveFromCart} userBalance={userBalance}/>
+      <Cart items={cartItems} onRemoveItem={handleRemoveFromCart} userBalance={userBalance} />
     </div>
   )
 }
-
