@@ -3,11 +3,14 @@ import { useUser } from "@clerk/clerk-react";
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { FaNewspaper, FaWallet, FaBook, FaTasks } from "react-icons/fa";
+import axios from "axios";
 import NewsChannel from "../Pages/NewsChannel";
 import "../Styles/Nav.css";
 import Wallet from "../Pages/Wallet";
 import Guide from "./Guide";
 import DailyTasks from "../Pages/DailyTasks";
+
+const API_URL = "https://web-finance-advisor.onrender.com/query";
 
 // Firebase config
 const firebaseConfig = {
@@ -32,10 +35,16 @@ function Nav() {
   const [initialMoney, setInitialMoney] = useState(0);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(1);
-  const [isNewsPopupOpen, setIsNewsPopupOpen] = useState(false); // State for news popup
-  const [isWalletPopupOpen, setIsWalletPopupOpen] = useState(false); // State for wallet popup
+  const [isNewsPopupOpen, setIsNewsPopupOpen] = useState(false);
+  const [isWalletPopupOpen, setIsWalletPopupOpen] = useState(false);
   const [isTaskSliderOpen, setIsTaskSliderOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
+  
+  // Chatbot states
+  const [query, setQuery] = useState("");
+  const [chatResponse, setChatResponse] = useState(null);
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatError, setError] = useState(null);
 
   useEffect(() => {
     const fetchUserStatus = async () => {
@@ -82,8 +91,24 @@ function Nav() {
     return () => clearInterval(timerInterval);
   }, [user, day, month, progress]);
 
+  const handleQuerySubmit = async () => {
+    if (!query) {
+      setError("Please enter a query.");
+      return;
+    }
+    setChatLoading(true);
+    setError(null);
+    try {
+      const res = await axios.get(`${API_URL}?query=${encodeURIComponent(query)}`);
+      setChatResponse(res.data);
+    } catch (err) {
+      setError("Failed to fetch data. Please try again.");
+    }
+    setChatLoading(false);
+  };
+
   const toggleNewsPopup = () => setIsNewsPopupOpen((prev) => !prev);
-  const toggleWalletPopup = () => setIsWalletPopupOpen((prev) => !prev); // Wallet popup toggle
+  const toggleWalletPopup = () => setIsWalletPopupOpen((prev) => !prev);
   const toggleTaskSlider = () => setIsTaskSliderOpen((prev) => !prev);
   const Guide1 = () => setIsGuideOpen((prev) => !prev);
 
@@ -113,7 +138,7 @@ function Nav() {
         </div>
         <div className="icon-wrapper" onClick={Guide1}>
           <FaBook className="icon" />
-          <span className="tooltip">Guide</span>
+          <span className="tooltip">ChatBot</span>
         </div>
         <div className="icon-wrapper" onClick={toggleTaskSlider}>
           <FaTasks className="icon" />
@@ -140,14 +165,49 @@ function Nav() {
             <button className="close-button" onClick={toggleWalletPopup}>
               &times;
             </button>
-            <Wallet /> {/* Wallet component */}
+            <Wallet />
           </div>
         </div>
       )}
 
-{isGuideOpen && (<Guide/>)}
+      {/* Guide/Chatbot Popup */}
+      {isGuideOpen && (
+        <div className="popup-overlay" onClick={Guide1}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-button" onClick={Guide1}>
+              &times;
+            </button>
+            <div className="flex flex-col items-center p-4">
+              <h1 className="text-2xl font-bold mb-4">Web Chatbot</h1>
+              <input
+                type="text"
+                className="border p-2 w-80 rounded mb-2"
+                placeholder="Enter your query here..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleQuerySubmit}
+                disabled={chatLoading}
+              >
+                {chatLoading ? "Loading..." : "Send"}
+              </button>
+              {chatError && <p className="text-red-500 mt-2">{chatError}</p>}
+              {chatResponse && (
+                <div className="mt-4 p-4 border rounded w-80 bg-gray-100">
+                  <h2 className="font-semibold">Query:</h2>
+                  <p>{chatResponse.query}</p>
+                  <h2 className="font-semibold mt-2">Summary:</h2>
+                  <p>{chatResponse.summary}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
-{isTaskSliderOpen && (
+      {isTaskSliderOpen && (
         <div className="task-slider">
           <div className="task-slider-content">
             <button className="close-button" onClick={toggleTaskSlider}>
