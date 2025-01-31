@@ -38,7 +38,7 @@
   }
   
   .icon {
-    font-size: 28px;
+    font-size: 36px;
     color: white;
     transition: transform 0.3s, color 0.3s;
     filter: drop-shadow(2px 2px 1px #00364d)
