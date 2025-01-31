@@ -47,10 +47,7 @@ body {
     right: 10px;
     cursor: pointer;
     transition: color 0.3s ease;
-  }
-  
-  .close-button:hover {
-    color: #ff5733; /* Slightly reddish hover color */
+    color: #ff5733;
   }
   
   
@@ -74,12 +71,27 @@ body {
   
   /* News Container */
   .news-container {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
     padding: 40px;
     max-width: 1200px;
     margin: auto;
+  }
+
+  .quiz-button-container {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .quiz-button {
+    background: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
   
   /* News Card */

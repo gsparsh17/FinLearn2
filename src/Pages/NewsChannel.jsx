@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/NewsChannel.css';
 import NewsCard from '../components/NewsCard.jsx';
+import NewsQuizPopup from '../components/NewsQuizPopup.jsx'; // Import quiz popup
 
 function NewsChannel() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedArticle, setSelectedArticle] = useState(null); // State for selected news
+  const [showQuiz, setShowQuiz] = useState(false); // State to toggle quiz popup
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(
-          'https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=f942fde3e317463ebe9c21b6f12f2d2b'
-        );
+        const response = await fetch('https://fetch-news-and-quiz.onrender.com/news');
         const data = await response.json();
-        setNews(data.articles);
+
+        // Convert summary into an array of news items and skip the first actual news item
+        const newsItems = data.news_summary
+          .split('\n')
+          .slice(2) // Skip the first news item and the intro text
+          .map((item) => item.replace(/^\d+\.\s/, '')); // Remove numbering
+
+        setNews(newsItems);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching news:', error);
@@ -24,14 +30,6 @@ function NewsChannel() {
 
     fetchNews();
   }, []);
-
-  const handleCardClick = (article) => {
-    setSelectedArticle(article); // Set the selected article for the popup
-  };
-
-  const closePopup = () => {
-    setSelectedArticle(null); // Close the popup
-  };
 
   return (
     <div>
@@ -44,26 +42,18 @@ function NewsChannel() {
           <p>Loading news...</p>
         ) : (
           news.map((article, index) => (
-            <NewsCard key={index} article={article} onClick={() => handleCardClick(article)} />
+            <NewsCard key={index} article={{ title: article }} />
           ))
         )}
       </div>
 
-      {selectedArticle && (
-        <div className="popup">
-          <div className="popup-content">
-            <button className="close-button" onClick={closePopup}>
-              &times;
-            </button>
-            <img src={selectedArticle.urlToImage} alt="News" className="popup-image" />
-            <h2>{selectedArticle.title}</h2>
-            <p>{selectedArticle.description}</p>
-            <a href={selectedArticle.url} target="_blank" rel="noopener noreferrer">
-              Read More
-            </a>
-          </div>
-        </div>
-      )}
+      {/* Play Quiz Button */}
+      <div className="quiz-button-container">
+        <button className="quiz-button" onClick={() => setShowQuiz(true)}>Play Quiz</button>
+      </div>
+
+      {/* Show Quiz Popup */}
+      {showQuiz && <NewsQuizPopup onClose={() => setShowQuiz(false)} />}
 
       <footer className="footer">
         <p>&copy; 2025 Dynamic News Page</p>
