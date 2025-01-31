@@ -17,6 +17,7 @@ import { ClerkProvider, RedirectToSignIn } from '@clerk/clerk-react';
 import StockTradingPage from "./Pages/StockTradingPage";
 import PortfolioPage from "./Pages/PortfolioPage";
 import { UserProvider } from "./context/UserContext";
+import AdminPanel from "./Pages/AdminPanel";
 
 // const clerkFrontendApi = process.env.REACT_APP_CLERK_FRONTEND_API;
 const PUBLISHABLE_KEY = "pk_test_c3BlY2lhbC1jb3lvdGUtOTguY2xlcmsuYWNjb3VudHMuZGV2JA";
@@ -55,6 +56,7 @@ function App() {
                       }
                     />
           <Route path="/news-channel" element={<NewsLoader />} />
+          <Route path="/adminpanel" element={<AdminPanel />} />
           <Route path="/investment" element={<Investment />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/daily-tasks" element={<DailyTasks />} />
