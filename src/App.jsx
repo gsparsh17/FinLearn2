@@ -15,7 +15,7 @@ import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Quiz from "./Pages/Quiz";
 import AdminPanel from "./Pages/AdminPanel";
-import Stock from "./Pages/Stock"; 
+import stock from "./Pages/stock"; 
 
 const PUBLISHABLE_KEY = "pk_test_c3BlY2lhbC1jb3lvdGUtOTguY2xlcmsuYWNjb3VudHMuZGV2JA";
 
@@ -24,7 +24,7 @@ const GameLoader = withLoader(Game);
 const BankLoader = withLoader(Bank);
 const MarketLoader = withLoader(Market);
 const NewsLoader = withLoader(NewsChannel);
-const StockLoader = withLoader(Stock);
+const StockLoader = withLoader(stock);
 
 function App() {
   return (

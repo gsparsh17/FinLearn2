@@ -9,7 +9,7 @@ import "../Styles/Nav.css";
 import Wallet from "../Pages/Wallet";
 import Guide from "./Guide";
 import DailyTasks from "../Pages/DailyTasks";
-import Stock from "../Pages/Stock";
+import Stock from "../Pages/stock";
 import StockTradingPage from "@/Pages/StockTradingPage";
 
 const API_URL = "https://web-finance-advisor.onrender.com/query";
