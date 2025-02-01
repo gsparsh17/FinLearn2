@@ -8,6 +8,7 @@ import { getFirestore, doc, getDoc } from "firebase/firestore"; // Firebase
 function Game() {
   const [userStatus, setUserStatus] = useState(null);
   const { user } = useUser();
+  const [showGuide, setShowGuide] = useState(null);
 
   useEffect(() => {
     const fetchUserStatus = async () => {
@@ -16,10 +17,10 @@ function Game() {
       const userDocRef = doc(db, "Users", userId);
       const userDocSnap = await getDoc(userDocRef);
 
-      if (userDocSnap.exists()) {
-        setUserStatus(userDocSnap.data().status || "existing");
+      if (userDocSnap.data().status === "new") {
+        setShowGuide(true)
       } else {
-        setUserStatus("new");
+        setShowGuide(false)
       }
     };
 
@@ -30,7 +31,7 @@ function Game() {
     <div>
       <Nav />
       <World />
-      {userStatus && <Guide userStatus={userStatus} />}
+      {showGuide && <Guide userStatus={userStatus} />}
     </div>
   );
 }

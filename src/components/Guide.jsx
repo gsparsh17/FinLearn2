@@ -4,7 +4,7 @@ import "../Styles/Guide.css";
 
 const Guide = ({ userStatus }) => {
   const [currentStep, setCurrentStep] = useState(0); // Current guide step
-  const [showGuide, setShowGuide] = useState(userStatus === "new"); // Show only if the user is new
+  const [showGuide, setShowGuide] = useState(true); // Show only if the user is new
 
   const guideSteps = [
     {

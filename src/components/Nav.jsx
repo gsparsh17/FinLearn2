@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
-import { FaNewspaper, FaWallet, FaBook, FaTasks, FaInfoCircle } from "react-icons/fa";
+import { FaNewspaper, FaWallet, FaBook, FaTasks, FaInfoCircle, FaChartLine } from "react-icons/fa";
 import axios from "axios";
 import NewsChannel from "../Pages/NewsChannel";
 import "../Styles/Nav.css";
 import Wallet from "../Pages/Wallet";
 import Guide from "./Guide";
 import DailyTasks from "../Pages/DailyTasks";
+import Stock from "../Pages/stock";
+import StockTradingPage from "@/Pages/StockTradingPage";
 
 const API_URL = "https://web-finance-advisor.onrender.com/query";
 
@@ -37,6 +39,7 @@ function Nav() {
   const [progress, setProgress] = useState(1);
   const [isNewsPopupOpen, setIsNewsPopupOpen] = useState(false);
   const [isWalletPopupOpen, setIsWalletPopupOpen] = useState(false);
+  const [isMarketPopupOpen, setIsMarketPopupOpen] = useState(false);
   const [isTaskSliderOpen, setIsTaskSliderOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [isGuideMentorOpen, setIsGuideMentorOpen] = useState(false);
@@ -119,6 +122,7 @@ function Nav() {
   const toggleTaskSlider = () => setIsTaskSliderOpen((prev) => !prev);
   const Guide1 = () => setIsGuideOpen((prev) => !prev);
   const GuideMentor = () => setIsGuideMentorOpen((prev) => !prev);
+  const StockMarket = () => setIsMarketPopupOpen((prev) => !prev);
 
   if (loading) {
     return (
@@ -152,9 +156,13 @@ function Nav() {
           <FaTasks className="icon" />
           <span className="tooltip">Tasks</span>
         </div>
-        <div className="guide-button" onClick={GuideMentor}>
-        <FaInfoCircle className="icon2" />
-        </div>
+        <div className="guide-button blink" onClick={GuideMentor}>
+  <FaInfoCircle className="icon2" />
+</div>
+<div className="market-button" onClick={StockMarket}>
+  <FaChartLine className="icon3" />
+</div>
+
       </div>
 
       {/* News Popup */}
@@ -181,15 +189,22 @@ function Nav() {
         </div>
       )}
 
-    {isGuideMentorOpen && (
-        <div className="popup-overlay" onClick={GuideMentor}>
+      {isMarketPopupOpen && (
+        <div className="popup-overlay" onClick={StockMarket}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-button" onClick={GuideMentor}>
+            <button className="close-button" onClick={StockMarket}>
               &times;
             </button>
-            <Guide />
+            <StockTradingPage/>
           </div>
         </div>
+      )}
+
+
+    {isGuideMentorOpen && (
+      <div className="absolute z-20 text-2xl" onClick={(e) => e.stopPropagation()}>
+      <Guide />
+    </div>
       )}
 
       {/* Guide/Chatbot Popup */}
