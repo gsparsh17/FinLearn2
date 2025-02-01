@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ClerkProvider, RedirectToSignIn } from '@clerk/clerk-react';
+import withLoader from "./components/WithLoader";
+import { UserProvider } from "./context/UserContext";
 import HomePage from "./Pages/HomePage";
 import Bank from "./Pages/Bank";
 import Market from "./Pages/Market";
@@ -11,62 +14,42 @@ import DailyTasks from "./Pages/DailyTasks";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Quiz from "./Pages/Quiz";
-import './index.css'
-import withLoader from "./components/WithLoader";
-import { ClerkProvider, RedirectToSignIn } from '@clerk/clerk-react';
-import StockTradingPage from "./Pages/StockTradingPage";
-import PortfolioPage from "./Pages/PortfolioPage";
-import { UserProvider } from "./context/UserContext";
 import AdminPanel from "./Pages/AdminPanel";
+import Stock from "./Pages/Stock"; // ✅ Import Stock.jsx
 
-// const clerkFrontendApi = process.env.REACT_APP_CLERK_FRONTEND_API;
 const PUBLISHABLE_KEY = "pk_test_c3BlY2lhbC1jb3lvdGUtOTguY2xlcmsuYWNjb3VudHMuZGV2JA";
 
-const HomePageLoader=withLoader(HomePage);
-const GameLoader=withLoader(Game);
-const BankLoader=withLoader(Bank);
-const MarketLoader=withLoader(Market);
-const NewsLoader=withLoader(NewsChannel);
-const StockTradingLoaderPage=withLoader(StockTradingPage);
-const PortfolioLoaderPage=withLoader(PortfolioPage);
-
+const HomePageLoader = withLoader(HomePage);
+const GameLoader = withLoader(Game);
+const BankLoader = withLoader(Bank);
+const MarketLoader = withLoader(Market);
+const NewsLoader = withLoader(NewsChannel);
+const StockLoader = withLoader(Stock);
 
 function App() {
-  const [portfolioCreated, setPortfolioCreated] = useState(false);
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <Router>
-      <Routes>
-          <Route path="/" element={<HomePageLoader/>} />
-          <Route path="/bank" element={<BankLoader/>} />
-          <Route path="/market" element={<MarketLoader />} />
-          <Route path="/game" element={<GameLoader/>} />
-          <Route
-                      path="/stock"
-                      element={
-                        portfolioCreated ? (
-                          <UserProvider>
-                          <StockTradingLoaderPage />
-                          </UserProvider>
-                        ) : (
-                          <UserProvider>
-                          <PortfolioLoaderPage onComplete={() => setPortfolioCreated(true)} />
-                          </UserProvider>
-                        )
-                      }
-                    />
-          <Route path="/news-channel" element={<NewsLoader />} />
-          <Route path="/adminpanel" element={<AdminPanel />} />
-          <Route path="/investment" element={<Investment />} />
-          <Route path="/wallet" element={<Wallet />} />
-          <Route path="/daily-tasks" element={<DailyTasks />} />
-          <Route path="/signin" element={<Login/>}/>
-          <Route path="/signup" element={<SignUp/>}/>
-          <Route path="/quiz" element={<Quiz/>}/>
-          <Route path="*" element={<RedirectToSignIn />} />
-        </Routes>
+      <UserProvider> {/* ✅ Wrap with UserProvider for global state */}
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePageLoader />} />
+            <Route path="/bank" element={<BankLoader />} />
+            <Route path="/market" element={<MarketLoader />} />
+            <Route path="/game" element={<GameLoader />} />
+            <Route path="/news-channel" element={<NewsLoader />} />
+            <Route path="/adminpanel" element={<AdminPanel />} />
+            <Route path="/investment" element={<Investment />} />
+            <Route path="/wallet" element={<Wallet />} />
+            <Route path="/daily-tasks" element={<DailyTasks />} />
+            <Route path="/signin" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/stock/*" element={<StockLoader />} /> {/* ✅ Added Stock route */}
+            <Route path="*" element={<RedirectToSignIn />} />
+          </Routes>
         </Router>
-        </ClerkProvider>
+      </UserProvider>
+    </ClerkProvider>
   );
 }
 

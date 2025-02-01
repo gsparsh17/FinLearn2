@@ -10,7 +10,7 @@ const Profile = () => {
       <p className="text-sm">Name: {user.name}</p>
       <p className="text-sm">Email: {user.email}</p>
       <p className="text-lg font-bold">
-        Budget: ${typeof user.budget === "number" ? user.budget.toFixed(2) : "0.00"}
+        Budget: Rs.{typeof user.budget === "number" ? user.budget.toFixed(2) : "0.00"}
       </p>
       <h5 className="text-md font-semibold mt-3">Portfolio:</h5>
       <ul className="list-disc pl-4">
