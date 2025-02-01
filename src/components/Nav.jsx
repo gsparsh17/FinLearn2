@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
-import { FaNewspaper, FaWallet, FaBook, FaTasks } from "react-icons/fa";
+import { FaNewspaper, FaWallet, FaBook, FaTasks, FaInfoCircle } from "react-icons/fa";
 import axios from "axios";
 import NewsChannel from "../Pages/NewsChannel";
 import "../Styles/Nav.css";
@@ -39,6 +39,7 @@ function Nav() {
   const [isWalletPopupOpen, setIsWalletPopupOpen] = useState(false);
   const [isTaskSliderOpen, setIsTaskSliderOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [isGuideMentorOpen, setIsGuideMentorOpen] = useState(false);
   
   // Chatbot states
   const [query, setQuery] = useState("");
@@ -117,6 +118,7 @@ function Nav() {
   const toggleWalletPopup = () => setIsWalletPopupOpen((prev) => !prev);
   const toggleTaskSlider = () => setIsTaskSliderOpen((prev) => !prev);
   const Guide1 = () => setIsGuideOpen((prev) => !prev);
+  const GuideMentor = () => setIsGuideMentorOpen((prev) => !prev);
 
   if (loading) {
     return (
@@ -150,6 +152,9 @@ function Nav() {
           <FaTasks className="icon" />
           <span className="tooltip">Tasks</span>
         </div>
+        <div className="guide-button" onClick={GuideMentor}>
+        <FaInfoCircle className="icon2" />
+        </div>
       </div>
 
       {/* News Popup */}
@@ -172,6 +177,17 @@ function Nav() {
               &times;
             </button>
             <Wallet />
+          </div>
+        </div>
+      )}
+
+    {isGuideMentorOpen && (
+        <div className="popup-overlay" onClick={GuideMentor}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-button" onClick={GuideMentor}>
+              &times;
+            </button>
+            <Guide />
           </div>
         </div>
       )}

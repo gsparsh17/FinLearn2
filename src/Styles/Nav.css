@@ -181,6 +181,31 @@
     cursor: pointer;
     color: red;
   }
+
+  .guide-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .guide-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .icon2{
+    font-size: 24px;
+  }
+  
   
   .task-slider ul {
     list-style: none;
