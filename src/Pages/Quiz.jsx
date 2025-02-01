@@ -5,7 +5,16 @@ import { getFirestore, doc, setDoc, getDoc, collection } from "firebase/firestor
 import { CSSTransition } from "react-transition-group";
 import "../Styles/Quiz.css";
 
-// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyB0bdQZHH22KbmUcXr46xu7Y6m1q1MqGR0",
+  authDomain: "cricdata-bdf21.firebaseapp.com",
+  projectId: "cricdata-bdf21",
+  storageBucket: "cricdata-bdf21.firebasestorage.app",
+  messagingSenderId: "191750755116",
+  appId: "1:191750755116:web:3ab4b85ec674c45c11d289",
+  measurementId: "G-ZH35DGLGDK",
+};
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 

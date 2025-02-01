@@ -140,22 +140,25 @@ function Nav() {
       </div>
 
       <div className="nav-icons">
-        <div className="icon-wrapper" onClick={toggleNewsPopup}>
-          <FaNewspaper className="icon" />
-          <span className="tooltip">Latest News</span>
-        </div>
-        <div className="icon-wrapper" onClick={toggleWalletPopup}>
-          <FaWallet className="icon" />
-          <span className="tooltip">Wallet</span>
-        </div>
-        <div className="icon-wrapper" onClick={Guide1}>
-          <FaBook className="icon" />
-          <span className="tooltip">ChatBot</span>
-        </div>
-        <div className="icon-wrapper" onClick={toggleTaskSlider}>
-          <FaTasks className="icon" />
-          <span className="tooltip">Tasks</span>
-        </div>
+      <div className="icon-wrapper group" onClick={toggleNewsPopup}>
+    <FaNewspaper className="icon text-blue-500 group-hover:text-white group-hover:scale-110 transition-all duration-300" />
+    <span className="tooltip">📰 Latest News</span>
+  </div>
+  
+  <div className="icon-wrapper group" onClick={toggleWalletPopup}>
+    <FaWallet className="icon text-green-500 group-hover:text-white group-hover:scale-110 transition-all duration-300" />
+    <span className="tooltip">💳 Wallet</span>
+  </div>
+  
+  <div className="icon-wrapper group" onClick={Guide1}>
+    <FaBook className="icon text-yellow-500 group-hover:text-white group-hover:scale-110 transition-all duration-300" />
+    <span className="tooltip">🤖 ChatBot</span>
+  </div>
+  
+  <div className="icon-wrapper group" onClick={toggleTaskSlider}>
+    <FaTasks className="icon text-purple-500 group-hover:text-white group-hover:scale-110 transition-all duration-300" />
+    <span className="tooltip">✅ Tasks</span>
+  </div>
         <div className="guide-button blink" onClick={GuideMentor}>
   <FaInfoCircle className="icon2" />
 </div>

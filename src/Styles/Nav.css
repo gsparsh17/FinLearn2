@@ -32,78 +32,56 @@
     gap: 20px;
   }
   
+  .icon-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 10px;
+  }
+  
   .icon-wrapper {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     cursor: pointer;
+    padding: 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease-in-out, background 0.3s;
+  }
+  
+  .icon-wrapper:hover {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
   }
   
   .icon {
-    font-size: 36px;
-    color: white;
-    transition: transform 0.3s, color 0.3s;
-    filter: drop-shadow(2px 2px 1px #00364d)
-  }
-  /* LoadingScreen.css */
-.loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: black; /* Full black background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 2rem;
-    font-family: "Arial", sans-serif;
-    z-index: 9999; /* Ensure it's on top of everything */
-  }
-  
-  .loading-text {
-    animation: fadeIn 1s ease-in-out infinite alternate;
-  }
-  
-  /* Optional animation for the loading text */
-  @keyframes fadeIn {
-    from {
-      opacity: 0.7;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  .icon:hover {
-    transform: scale(1.2);
-    filter: drop-shadow(2px 2px 1px #ffd451);
+    font-size: 32px;
+    transition: all 0.3s ease-in-out;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 1));
   }
   
   .tooltip {
     position: absolute;
     bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ffd451;
-    color: #00364d;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
     font-size: 12px;
-    padding: 5px 8px;
-    border-radius: 4px;
+    padding: 5px 10px;
+    border-radius: 6px;
     white-space: nowrap;
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s, transform 0.3s;
-    transform: translateX(-50%) translateY(10px);
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
   
   .icon-wrapper:hover .tooltip {
     opacity: 1;
-    transform: translateX(-50%) translateY(0px);
+    transform: translateY(0);
   }
   
-  .icon-wrapper:hover .icon {
-    filter: drop-shadow(2px 2px 1px #ffd451);
-  }
 
   .popup-overlay {
     position: fixed;
