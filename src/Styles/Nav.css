@@ -254,3 +254,18 @@
     border-bottom: 1px solid #ccc;
   }
   
+  /* Slick carousel styles */
+.slick-prev, .slick-next {
+  z-index: 1;
+  color: white;
+}
+.slick-prev {
+  left: 10px;
+}
+.slick-next {
+  right: 10px;
+}
+.slick-slide {
+  display: flex;
+  justify-content: center;
+}

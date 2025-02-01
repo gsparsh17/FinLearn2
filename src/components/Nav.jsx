@@ -11,6 +11,7 @@ import Guide from "./Guide";
 import DailyTasks from "../Pages/DailyTasks";
 import Stock from "../Pages/stock";
 import StockTradingPage from "@/Pages/StockTradingPage";
+import Slider from "react-slick";
 
 const API_URL = "https://web-finance-advisor.onrender.com/query";
 
@@ -43,12 +44,46 @@ function Nav() {
   const [isTaskSliderOpen, setIsTaskSliderOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [isGuideMentorOpen, setIsGuideMentorOpen] = useState(false);
+  // const [news, setNews] = useState([]);
+  // const [loading1, setLoading1] = useState(true);
   
   // Chatbot states
   const [query, setQuery] = useState("");
   const [messages, setMessages] = useState([]);
   const [chatLoading, setChatLoading] = useState(false);
   const [chatError, setError] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchNews = async () => {
+  //     try {
+  //       const response = await fetch('https://fetch-news-and-quiz.onrender.com/news');
+  //       const data = await response.json();
+  //       const newsItems = data.news_summary
+  //         .split('\n')
+  //         .slice(2) // Skip the first news item and the intro text
+  //         .map((item) => item.replace(/^\d+\.\s/, '')); // Remove numbering
+  //       setNews(newsItems);
+  //       console.log(news)
+  //       setLoading1(false);
+  //     } catch (error) {
+  //       console.error('Error fetching news:', error);
+  //       setLoading1(false);
+  //     }
+  //   };
+  //   fetchNews();
+  // }, []);
+
+  // // Carousel settings
+  // const settings = {
+  //   dots: true,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 3,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   autoplaySpeed: 3000,
+  //   arrows: true,
+  // };
 
   useEffect(() => {
     const fetchUserStatus = async () => {
@@ -301,6 +336,18 @@ function Nav() {
           </div>
         </div>
       )}
+
+      {/* {!loading1 && news.length > 0 && (
+        <div className="news-carousel-container absolute flex flex-col">
+          <Slider {...settings}>
+            {news.map((article, index) => (
+              <div key={index} className="carousel-item">
+                <h3>{article}</h3>
+              </div>
+            ))}
+          </Slider>
+        </div>
+      )} */}
     </div>
   );
 }
