@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { getFirestore, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { useUser } from "@clerk/clerk-react"; // Get the logged-in user
 import { initializeApp } from "firebase/app";
 
@@ -36,10 +36,11 @@ export const UserProvider = ({ children }) => {
         if (userDoc.exists()) {
           const data = userDoc.data();
           setUserData({
-            name: data.name || "", // Now using Firestore name if available
-            email: data.email || user.email, // Use Firestore email, fallback to Clerk email
-            budget: data.money || 0, // Use Firestore `money` as budget
+            name: data.name || "",
+            email: data.email || user.email,
+            budget: data.money || 0,
           });
+          setPortfolio(data.portfolio || {});  // Load portfolio if exists
         } else {
           setUserData({ name: "", email: user.email, budget: 0 });
         }
@@ -54,26 +55,28 @@ export const UserProvider = ({ children }) => {
     if (user) {
       const userRef = doc(db, "Users", user.id);
       try {
-        await setDoc(userRef, { 
-          name: updatedUser.name,
-          email: updatedUser.email, 
-          money: updatedUser.money,  // Save remaining balance
-          budget: updatedUser.budget,
-          status: "Portfolio Created" // Save stock budget
-        }, { merge: true });
-  
-        setUserData(updatedUser); // Update local state
+        await setDoc(
+          userRef,
+          {
+            name: updatedUser.name,
+            email: updatedUser.email,
+            budget: updatedUser.budget, // Save remaining budget
+            portfolio: portfolio, // Save the stock portfolio
+            status: "Portfolio Updated",
+          },
+          { merge: true }
+        );
+        setUserData(updatedUser); // Update local userData immediately
       } catch (error) {
         console.error("Error updating user data:", error);
       }
     }
   };
-  
 
   return (
     <UserContext.Provider value={{ 
       user: userData, 
-      setUser: updateUserInFirestore, // Now updates Firebase too
+      setUser: updateUserInFirestore, // Update user data in Firestore
       portfolio, 
       setPortfolio 
     }}>
