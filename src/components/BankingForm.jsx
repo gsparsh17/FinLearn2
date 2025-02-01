@@ -1,6 +1,25 @@
 import React, { useState } from "react";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, setDoc, getDoc, collection } from "firebase/firestore";
+import { useUser } from "@clerk/clerk-react";
+import { updateDoc, arrayUnion } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB0bdQZHH22KbmUcXr46xu7Y6m1q1MqGR0",
+  authDomain: "cricdata-bdf21.firebaseapp.com",
+  projectId: "cricdata-bdf21",
+  storageBucket: "cricdata-bdf21.firebasestorage.app",
+  messagingSenderId: "191750755116",
+  appId: "1:191750755116:web:3ab4b85ec674c45c11d289",
+  measurementId: "G-ZH35DGLGDK",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 const BankingForm = ({ onBack }) => {
+  const { user } = useUser(); // ✅ Get authenticated user
   const [formData, setFormData] = useState({
     name: "",
     maidenName: "",
@@ -30,10 +49,38 @@ const BankingForm = ({ onBack }) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+  
+    if (!user) {
+      alert("User not logged in.");
+      return;
+    }
+  
+    try {
+      const userRef = doc(db, "Users", user.id);
+      const userSnap = await getDoc(userRef);
+      onBack();
+      if (userSnap.exists()) {
+        // If the document exists, update it
+        await updateDoc(userRef, {
+          status: arrayUnion("Bank Account Created"),
+        });
+      } else {
+        // If the document doesn't exist, create it first
+        await setDoc(userRef, {
+          status: ["Bank Account Created"],
+        });
+      }
+  
+      console.log("Bank account created status added!");
+      alert("Bank account created successfully!");
+    } catch (error) {
+      console.error("Error updating status:", error);
+      alert("Failed to update status. Try again!");
+    }
   };
+  
 
   return (
     <div className="bg-gradient-to-br from-purple-800 via-indigo-600 to-blue-500 w-500px p-10">
@@ -415,7 +462,7 @@ const BankingForm = ({ onBack }) => {
           <button
             type="submit"
             className="bg-[#ffd451] text-[#00364d] font-cursive text-lg px-6 py-3 rounded-full shadow-md hover:bg-[#0078d7] transition duration-300 ease-in-out"
-            onClick={onBack}
+            onClick={handleSubmit}
           >
             Submit Form
           </button>

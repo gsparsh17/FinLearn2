@@ -168,7 +168,7 @@ function World() {
       window.open("/market", "_blank");
     }
     if (checkProximity1(walkingPosition, imagePosition2)) {
-      window.open("/stock", "_blank");
+      window.open("/stock/stock", "_blank");
     }
   }, [animatedPosition])
 
