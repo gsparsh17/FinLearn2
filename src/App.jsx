@@ -15,7 +15,7 @@ import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Quiz from "./Pages/Quiz";
 import AdminPanel from "./Pages/AdminPanel";
-import Stock from "./Pages/Stock"; // ✅ Import Stock.jsx
+import Stock from "./Pages/Stock"; 
 
 const PUBLISHABLE_KEY = "pk_test_c3BlY2lhbC1jb3lvdGUtOTguY2xlcmsuYWNjb3VudHMuZGV2JA";
 
@@ -44,7 +44,7 @@ function App() {
             <Route path="/signin" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/quiz" element={<Quiz />} />
-            <Route path="/stock/*" element={<StockLoader />} /> {/* ✅ Added Stock route */}
+            <Route path="/stock/*" element={<StockLoader />} /> 
             <Route path="*" element={<RedirectToSignIn />} />
           </Routes>
         </Router>
