@@ -1,32 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, setDoc, getDocs, collection } from "firebase/firestore";
 import { Search, Ban, CheckCircle, ClipboardList, UserPlus, RefreshCw, Shield, Mail, Wallet } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
-const sampleUsers = [
-  { id: 1, username: "PlayerOne", email: "player1@example.com", status: "Active", balance: 500 },
-  { id: 2, username: "ShadowNinja", email: "shadow@example.com", status: "Banned", balance: 100 },
-  { id: 3, username: "GameMaster", email: "gm@example.com", status: "Active", balance: 1500 },
-  { id: 4, username: "RogueWarrior", email: "rogue@example.com", status: "Inactive", balance: 250 },
-];
+// const sampleUsers = [
+//   { id: 1, username: "PlayerOne", email: "player1@example.com", status: "Active", balance: 500 },
+//   { id: 2, username: "ShadowNinja", email: "shadow@example.com", status: "Banned", balance: 100 },
+//   { id: 3, username: "GameMaster", email: "gm@example.com", status: "Active", balance: 1500 },
+//   { id: 4, username: "RogueWarrior", email: "rogue@example.com", status: "Inactive", balance: 250 },
+// ];
 
 export default function AdminPanel() {
-  const [users, setUsers] = useState(sampleUsers);
   const [search, setSearch] = useState("");
   const [taskDialog, setTaskDialog] = useState(false);
   const [addUserDialog, setAddUserDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [task, setTask] = useState("");
   const [newUser, setNewUser] = useState({
-    username: "",
+    name: "",
     email: "",
-    balance: 0
+    money: 0
   });
+
+  const [users, setUsers] = useState([]);
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB0bdQZHH22KbmUcXr46xu7Y6m1q1MqGR0",
+    authDomain: "cricdata-bdf21.firebaseapp.com",
+    projectId: "cricdata-bdf21",
+    storageBucket: "cricdata-bdf21.firebasestorage.app",
+    messagingSenderId: "191750755116",
+    appId: "1:191750755116:web:3ab4b85ec674c45c11d289",
+    measurementId: "G-ZH35DGLGDK",
+  };
+  
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  
+  useEffect(() => {
+    // Fetching user data from Firebase Firestore
+    const fetchUsers = async () => {
+      try {
+        const userCollectionRef = collection(db, 'Users'); // 'Users' is the collection name
+        const userSnapshot = await getDocs(userCollectionRef);
+        const userList = userSnapshot.docs.map(doc => ({
+          ...doc.data(), 
+          id: doc.id  // Add the document ID to the user data
+        }));
+        setUsers(userList); // Set the state with the user list
+      } catch (error) {
+        console.error("Error fetching users: ", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleBan = (id) => {
     setUsers(users.map(user => user.id === id ? { ...user, status: "Banned" } : user));
@@ -47,19 +82,40 @@ export default function AdminPanel() {
     setTaskDialog(true);
   };
 
-  const assignTask = () => {
+  const assignTask = async() => {
     if (!task.trim()) {
       toast.error("Please enter a task description", {
         icon: <ClipboardList className="w-4 h-4 text-red-500" />
       });
       return;
     }
-    toast.success(`Task assigned to ${selectedUser.username}`, {
+    // Prepare task data
+  const taskData = {
+    description: task,
+    assignedBy: currentUser.name, // Assuming you have a currentUser object
+    assignedTo: selectedUser.name,
+    assignedAt: new Date(),
+    status: 'assigned', // You can change this based on your task flow (e.g., pending, in-progress)
+  };
+
+  // Save task to Firestore
+  try {
+    await setDoc(doc(firestore, 'tasks', selectedUser.id), {
+      tasks: firestore.FieldValue.arrayUnion(taskData),
+    });
+
+    toast.success(`Task assigned to ${selectedUser.name}`, {
       icon: <ClipboardList className="w-4 h-4 text-green-500" />
     });
     setTaskDialog(false);
     setTask("");
-  };
+  } catch (error) {
+    console.error("Error assigning task: ", error);
+    toast.error("Failed to assign task. Please try again later.", {
+      icon: <ClipboardList className="w-4 h-4 text-red-500" />
+    });
+  }
+};
 
   const handleAddUser = () => {
     if (!newUser.username || !newUser.email) {
@@ -83,9 +139,10 @@ export default function AdminPanel() {
   };
 
   const filteredUsers = users.filter(user =>
-    user.username.toLowerCase().includes(search.toLowerCase()) ||
-    user.email.toLowerCase().includes(search.toLowerCase())
+    (user.name && user.name.toLowerCase().includes(search.toLowerCase())) ||
+    (user.email && user.email.toLowerCase().includes(search.toLowerCase()))
   );
+  
 
   return (
     <div className="p-8 space-y-8 bg-gradient-to-br from-[#001a2f] via-[#00364d] to-[#002233] text-white min-h-screen">
@@ -134,7 +191,7 @@ export default function AdminPanel() {
                 <TableRow key={user.id} className="hover:bg-[#005c91]/50 transition-all duration-300">
                   <TableCell className="font-medium flex items-center gap-2">
                     <UserPlus className="w-4 h-4 text-[#ffd451]" />
-                    {user.username}
+                    {user.name}
                   </TableCell>
                   <TableCell className="flex items-center gap-2">
                     <Mail className="w-4 h-4 text-[#ffd451]" />
@@ -151,7 +208,7 @@ export default function AdminPanel() {
                   </TableCell>
                   <TableCell className="font-mono flex items-center gap-2">
                     <Wallet className="w-4 h-4 text-[#ffd451]" />
-                    ${user.balance.toLocaleString()}
+                    Rs.{user.money.toLocaleString()}
                   </TableCell>
                   <TableCell className="flex gap-2">
                     {user.status !== "Banned" ? (

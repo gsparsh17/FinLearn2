@@ -238,6 +238,21 @@ function Nav() {
         </div>
       )}
 
+{isTaskSliderOpen && (
+        <div className="task-slider right-72">
+          <div className="task-slider-header flex justify-between items-center p-4 bg-gray-800 text-white">
+            <h2 className="text-xl font-bold">Daily Financial Quests</h2>
+            <button
+              className="bg-red-500 text-white rounded-full p-2 w-10 h-10 flex items-center justify-center shadow-lg hover:bg-red-600 active:bg-red-700 transform hover:scale-105 active:scale-95 transition duration-300"
+              onClick={toggleTaskSlider}
+            >
+              &times;
+            </button>
+          </div>
+          <DailyTasks />
+        </div>
+      )}
+
 
     {isGuideMentorOpen && (
       <div className="absolute z-20 text-2xl" onClick={(e) => e.stopPropagation()}>
